@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortnite Battle Slots - Advanced Edition</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .casino-container {
+            background: url('/api/placeholder/800/600') center/cover;
+            background-color: #191919;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            max-width: 800px;
+            width: 95%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .machine-border {
+            background: linear-gradient(45deg, #ffd700, #ff9900, #ffd700);
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .slot-machine {
+            background: #080808;
+            border-radius: 10px;
+            padding: 25px;
+            border: 3px solid #444;
+            position: relative;
+        }
+
+        .machine-top {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: linear-gradient(to right, #5B47FB, #1ED5FF);
+            border-radius: 10px 10px 0 0;
+            border-bottom: 5px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .machine-top::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+        }
+
+        .machine-top h1 {
+            font-size: 32px;
+            color: #FFC800;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 200, 0, 0.8);
+            margin: 0;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .jackpot-display {
+            background: #000;
+            color: #ff0000;
+            font-size: 24px;
+            padding: 5px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            border: 2px solid #333;
+            box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .reels-container {
+            background: #000;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #444;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+        }
+
+        .reels-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .reels-container::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .reels {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            position: relative;
+            
+        }
+
+        .reel {
+            background: linear-gradient(to bottom, #333, #111, #333);
+            border-radius: 5px;
+            width: 140px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 70px;
+            overflow: hidden;
+            position: relative;
+            border: 3px solid #444;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+            margin: 0 5px;
+        }
+
+        .reel::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .reel::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .reel-highlight {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 70px;
+            transform: translateY(-50%);
+            border-top: 2px solid rgba(255, 200, 0, 0.7);
+            border-bottom: 2px solid rgba(255, 200, 0, 0.7);
+            box-shadow: 0 0 10px rgba(255, 200, 0, 0.5);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .symbol-display {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #24344D;
+            position: relative;
+            overflow: hidden;
+            
+        }
+
+        .symbol-img {
+            width: 80%;
+            height: 80%;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            transform: translate(0px, 35px)
+        }
+
+        .machine-lever {
+            position: absolute;
+            top: 50%;
+            right: -40px;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 150px;
+            background: linear-gradient(to right, #c00, #f00);
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .machine-lever::before {
+            content: "";
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: #f00;
+            border-radius: 50%;
+            border: 5px solid #900;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .machine-lever:hover::before {
+            background: #ff5;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            background: #222;
+            padding: 15px;
+            border-radius: 10px;
+            border: 3px solid #444;
+        }
+
+        .spin-btn {
+            background: linear-gradient(to bottom, #ff5c33, #cc0000);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 22px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(204, 0, 0, 0.5);
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            min-width: 150px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #ff3300;
+        }
+
+        .spin-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.5s;
+        }
+
+        .spin-btn:hover::before {
+            left: 100%;
+        }
+
+        .spin-btn:hover {
+            background: linear-gradient(to bottom, #ff3300, #aa0000);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(204, 0, 0, 0.7);
+        }
+
+        .spin-btn:active {
+            transform: translateY(1px);
+        }
+
+        .spin-btn:disabled {
+            background: linear-gradient(to bottom, #777, #555);
+            cursor: not-allowed;
+            transform: none;
+            border-color: #555;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats-display {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: #000;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 2px solid #444;
+            min-width: 120px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            color: #FFC800;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 200, 0, 0.5);
+        }
+
+        .vbucks-value {
+            color: #4DD4FF;
+            text-shadow: 0 0 5px rgba(77, 212, 255, 0.5);
+        }
+
+        .message-display {
+            text-align: center;
+            height: 40px;
+            font-size: 24px;
+            margin: 15px 0;
+            color: #FFC800;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 200, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bet-controls {
+            display: flex;
+            align-items: center;
+            background: #333;
+            padding: 10px;
+            border-radius: 50px;
+            border: 2px solid #444;
+        }
+
+        .bet-btn {
+            background: linear-gradient(to bottom, #4DD4FF, #0088cc);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s;
+        }
+
+        .bet-btn:hover {
+            background: linear-gradient(to bottom, #33CCFF, #0077b3);
+            transform: translateY(-2px);
+        }
+
+        .bet-btn:active {
+            transform: translateY(1px);
+        }
+
+        .bet-amount {
+            font-size: 20px;
+            margin: 0 10px;
+            color: #fff;
+        }
+
+        .progress-container {
+            width: 100%;
+            background: #333;
+            height: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #4DD4FF, #3366ff);
+            width: 0%;
+            transition: width 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 20%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progressShine 1.5s infinite;
+        }
+
+        @keyframes progressShine {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+        .xp-level {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            z-index: 5;
+        }
+
+        .jackpot-animation {
+            animation: jackpot 1s infinite;
+        }
+
+        @keyframes jackpot {
+            0% { color: #FFC800; text-shadow: 0 0 10px #FFC800; }
+            50% { color: white; text-shadow: 0 0 20px #FFC800; }
+            100% { color: #FFC800; text-shadow: 0 0 10px #FFC800; }
+        }
+
+        .minigame-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .minigame {
+            background: #222;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+            border: 3px solid #FFC800;
+            box-shadow: 0 0 30px rgba(255, 200, 0, 0.5);
+            position: relative;
+        }
+
+        .minigame-title {
+            text-align: center;
+            font-size: 28px;
+            color: #FFC800;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 200, 0, 0.5);
+        }
+
+        .minigame-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .minigame-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: #f00;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .treasure-chest {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .chest {
+            width: 100px;
+            height: 100px;
+            background: url('/api/placeholder/100/100') center/cover;
+            background-color: #964B00;
+            border: 3px solid #FFC800;
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #FFC800;
+            font-size: 40px;
+        }
+
+        .chest:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 200, 0, 0.5);
+        }
+
+        .chest-closed::before {
+            content: "?";
+            font-size: 40px;
+            font-weight: bold;
+            color: #FFC800;
+        }
+
+        .chest-reward {
+            font-size: 20px;
+            margin-top: 10px;
+            color: #FFC800;
+            text-align: center;
+            height: 30px;
+        }
+
+        .level-up-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+        }
+
+        .level-up-content {
+            background: linear-gradient(135deg, #5B47FB, #1ED5FF);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 0 50px rgba(30, 213, 255, 0.8);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 30px rgba(30, 213, 255, 0.7); }
+            50% { box-shadow: 0 0 50px rgba(30, 213, 255, 1); }
+            100% { box-shadow: 0 0 30px rgba(30, 213, 255, 0.7); }
+        }
+
+        .level-up-title {
+            font-size: 36px;
+            color: #FFC800;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            animation: scaleText 1s infinite;
+        }
+
+        @keyframes scaleText {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .level-up-reward {
+            font-size: 24px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .level-up-btn {
+            background: #FFC800;
+            color: #222;
+            border: none;
+            padding: 10px 30px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .level-up-btn:hover {
+            background: #FFD700;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 200, 0, 0.5);
+        }
+
+        .paylines {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #aaa;
+            text-align: center;
+        }
+
+        .spin-history {
+            margin-top: 20px;
+            padding: 10px;
+            background: #222;
+            border-radius: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #444;
+            display: none;
+        }
+
+        .spin-history-title {
+            font-size: 18px;
+            color: #FFC800;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .spin-history-entry {
+            padding: 5px;
+            border-bottom: 1px solid #444;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .wheel-minigame {
+            width: 300px;
+            height: 300px;
+            background: url('/api/placeholder/300/300') center/cover;
+            background-color: #222;
+            border-radius: 50%;
+            position: relative;
+            margin: 20px auto;
+            border: 5px solid #FFC800;
+            box-shadow: 0 0 20px rgba(255, 200, 0, 0.5);
+        }
+
+        .wheel-section {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            transform-origin: bottom;
+        }
+
+        .wheel-arrow {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid #f00;
+            z-index: 5;
+        }
+
+        .wheel-spin-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: #f00;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .skin-reward {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .skin-image {
+            width: 150px;
+            height: 150px;
+            background: url('/api/placeholder/150/150') center/cover;
+            background-color: #4DD4FF;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 3px solid #FFC800;
+            box-shadow: 0 0 15px rgba(255, 200, 0, 0.5);
+        }
+
+        .skin-name {
+            font-size: 20px;
+            color: #FFC800;
+            margin-top: 10px;
+        }
+
+        .skin-rarity {
+            font-size: 16px;
+            color: #4DD4FF;
+            margin-top: 5px;
+        }
+
+        .settings-btn {
+            position: absolute;
+            top: -5px;
+            right: -3px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .settings-menu {
+            position: absolute;
+            top: 60px;
+            right: 10px;
+            background: #222;
+            border-radius: 10px;
+            padding: 15px;
+            width: 200px;
+            border: 2px solid #444;
+            display: none;
+            z-index: 50;
+        }
+
+        .settings-option {
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+            font-size: 16px;
+            color: #ccc;
+        }
+
+        .settings-option label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .settings-option input {
+            margin-left: 10px;
+        }
+
+        .daily-bonus {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #FFC800;
+            color: #222;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .daily-bonus:hover {
+            background: #FFD700;
+            transform: translateY(-2px);
+        }
+
+        .win-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+    </style>
+</head>
+<body>
+    <audio controls>
+        <source src="coralcorus.mp3" type="audio/mp3">
+    </audio>
+
+    <div class="casino-container">
+        <div class="settings-btn">⚙️</div>
+        <div class="settings-menu">
+            <div class="settings-option">
+                <label>
+                    Sound Effects
+                    <input type="checkbox" id="SoundEffects"  checked>
+                </label>
+            </div>
+            <div class="settings-option">
+                <label>
+                    Music
+                    <input type="checkbox" id="music" checked>
+                </label>
+            </div>
+            <div class="settings-option">
+                <label>
+                    Show History
+                    <input type="checkbox" id="history" checked>
+                </label>
+            </div>
+        </div>
+
+        <div class="daily-bonus">DAILY BONUS AVAILABLE!</div>
+
+        <div class="machine-border">
+            <div class="slot-machine">
+                <div class="machine-top">
+                    <h1>FORTNITE BATTLE SLOTS</h1>
+                    <div class="jackpot-display">JACKPOT: 100,000,000,000 V-BUCKS 🤑🤑🤑</div>
+                </div>
+
+                <div class="stats-display">
+                    <div class="stat-box">
+                        <img src="battlepass.webp" style = "height: 40px; width: 40px;">
+                        <div class="stat-value" id="level-display">1</div>
+                    </div>
+                    <div class="stat-box">
+                        <img src="xp_icon.webp" style = "height: 40px; width: 40px;">
+                        <div class="stat-value" id="xp-display">0/100</div>
+                    </div>
+                    <div class="stat-box">
+                        <img src="vbucks.webp" style = "height: 40px; width: 40px;">
+                        <div class="stat-value vbucks-value" id="balance-display">1000</div>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="xp-bar"></div>
+                    <div class="xp-level" id="xp-level">0/100 XP</div>
+                </div>
+
+                <div class="reels-container">
+                    <div class="reels">
+                        <div class="reel">
+                            <div class="symbol-display" id="reel1">
+                                <div class="symbol-img" >🛡️</div>
+                            </div>
+                        </div>
+                        <div class="reel">
+                            <div class="symbol-display" transform: translate(0px, 100000px) id="reel2">
+                                <div class="symbol-img">🔫</div>
+                            </div>
+                        </div>
+                        <div class="reel">
+                            <div class="symbol-display" id="reel3">
+                                <div class="symbol-img">🎒</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reel-highlight"></div>
+                    <div class="win-lines"></div>
+                </div>
+
+                <div class="message-display" id="message"></div>
+
+                <div class="controls">
+                    <div class="bet-controls">
+                        <button class="bet-btn" id="decrease-bet">-</button>
+                        <div class="bet-amount">BET: <span id="bet-display" class="vbucks-value">10</span> V-BUCKS</div>
+                        <button class="bet-btn" id="increase-bet">+</button>
+                    </div>
+                    <button class="spin-btn" id="spin-btn">SPIN</button>
+                </div>
+
+                <div class="machine-lever" id="lever"></div>
+
+                <div class="paylines">
+                    🛡️🛡️🛡️ = 3x | 🔫🔫🔫 = 4x | 🎒🎒🎒 = 5x | 🏆🏆🏆 = 6x | 🌈🌈🌈 = 10x | 🦙🦙🦙 = 20x | 💯💯💯 = 50x
+                </div>
+
+                <div class="spin-history" id="spin-history">
+                    <div class="spin-history-title">SPIN HISTORY</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Minigame Container -->
+    <div class="minigame-container" id="minigame-container">
+        <div class="minigame">
+            <button class="minigame-close" id="minigame-close">X</button>
+            <div class="minigame-title" id="minigame-title">CHEST CHALLENGE</div>
+            <div class="minigame-content" id="minigame-content">
+                <!-- Will be filled dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Level Up Animation -->
+    <div class="level-up-animation" id="level-up-animation">
+        <div class="level-up-content">
+            <div class="level-up-title">LEVEL UP!</div>
+            <div class="level-up-reward" id="level-up-reward">You have earned a reward!</div>
+            <button class="level-up-btn" id="level-up-btn">Claim Reward</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to handle game logic, animations, and interactions
+        document.getElementById('spin-btn').addEventListener('click', function() {
+            const betAmount = parseInt(document.getElementById('bet-display').innerText);
+            const currentBalance = parseInt(document.getElementById('balance-display').innerText);
+            
+            if (currentBalance < betAmount) {
+                document.getElementById('message').innerText = "Not enough V-Bucks!";
+                return;
+            }
+
+            // Disable the spin button
+            this.disabled = true;
+            this.innerText = "SPINNING...";
+            
+            const spinning = '🔄'
+
+            document.getElementById('reel1').innerHTML = `<div class="symbol-img">${spinning}</div>`;
+            document.getElementById('reel2').innerHTML = `<div class="symbol-img">${spinning}</div>`;
+            document.getElementById('reel3').innerHTML = `<div class="symbol-img">${spinning}</div>`;
+            
+            // Simulate spinning the reels
+            const symbols = ['🛡️', '🔫', '🎒', '🏆', '🌈', '🦙', '💯'];
+            
+            // Randomly select symbols for each reel
+            const reel1 = symbols[Math.floor(Math.random() * symbols.length)];
+            const reel2 = symbols[Math.floor(Math.random() * symbols.length)];
+            const reel3 = symbols[Math.floor(Math.random() * symbols.length)];
+            
+
+            setTimeout(() => {
+                document.getElementById('reel1').innerHTML = `<div class="symbol-img">${reel1}</div>`;
+                document.getElementById('reel2').innerHTML = `<div class="symbol-img">${reel2}</div>`;
+                document.getElementById('reel3').innerHTML = `<div class="symbol-img">${reel3}</div>`;
+                this.disabled = false;
+                this.innerText = "SPIN"; // Reset button text
+            }, 500); // Adjust the timeout duration as needed
+            // Update the reels with a spinning animation
+            
+            // Update balance and message based on results
+            // (Add your win logic here)
+
+            // Update spin history
+            
+            const spinHistory = document.getElementById('spin-history');
+            const newEntry = document.createElement('div');
+            newEntry.className = 'spin-history-entry';
+            newEntry.innerText = `Spin: ${reel1} ${reel2} ${reel3}`;
+            spinHistory.appendChild(newEntry);
+            spinHistory.style.display = 'block';
+
+            // Update balance
+            const newBalance = currentBalance - betAmount; // Deduct bet amount
+            document.getElementById('balance-display').innerText = newBalance;
+
+            // Example win logic (you can customize this)
+            if (reel1 === reel2 && reel2 === reel3) {
+                const winAmount = betAmount * 10; // Example win multiplier
+                document.getElementById('message').innerText = `You won ${winAmount} V-Bucks!`;
+                document.getElementById('balance-display').innerText = newBalance + winAmount; // Update balance with winnings
+                levelUp(winAmount); // Check for level up
+            } else {
+                document.getElementById('message').innerText = "Try again!";
+            }
+
+            // Update XP
+            updateXP(betAmount);
+
+            // Re-enable the spin button after a delay (simulate spinning time)
+        });
+
+        document.getElementById('increase-bet').addEventListener('click', function() {
+            let betAmount = parseInt(document.getElementById('bet-display').innerText);
+            if (betAmount < 100) {
+                betAmount += 10; // Increase bet by 10
+                document.getElementById('bet-display').innerText = betAmount;
+            } else if (betAmount >= 100){
+                betAmount += 50; // Increase bet by 50
+                document.getElementById('bet-display').innerText = betAmount;
+            }
+        });
+
+        document.getElementById('decrease-bet').addEventListener('click', function() {
+            let betAmount = parseInt(document.getElementById('bet-display').innerText);
+            if (betAmount > 100) {
+                betAmount -= 50; // Decrease bet by 50
+                document.getElementById('bet-display').innerText = betAmount;
+            } 
+            else if (betAmount > 10) {
+                betAmount -= 10; // Decrease bet by 10
+                document.getElementById('bet-display').innerText = betAmount;
+            }
+        });
+
+        // Daily bonus click event
+        document.querySelector('.daily-bonus').addEventListener('click', function() {
+            const currentBalance = parseInt(document.getElementById('balance-display').innerText);
+            const bonusAmount = 200; // Example bonus amount
+            document.getElementById('balance-display').innerText = currentBalance + bonusAmount;
+            document.getElementById('message').innerText = `You received ${bonusAmount} V-Bucks!`;
+            this.style.display = 'none'; // Hide the daily bonus element
+        });
+
+        // Settings button toggle
+        document.querySelector('.settings-btn').addEventListener('click', function() {
+            const settingsMenu = document.querySelector('.settings-menu');
+            settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close minigame
+        document.getElementById('minigame-close').addEventListener('click', function() {
+            document.getElementById('minigame-container').style.display = 'none';
+        });
+
+        // Level up button
+        document.getElementById('level-up-btn').addEventListener('click', function() {
+            document.getElementById('level-up-animation').style.display = 'none';
+        });
+
+        function updateXP(betAmount) {
+            const levelDisplay = document.getElementById('level-display');
+            let currentLevel = parseInt(levelDisplay.innerText);
+            let currentXP = parseInt(document.getElementById('xp-display').innerText.split('/')[0]);
+            let levelUpAmount = parseInt(document.getElementById('xp-display').innerText.split('/')[1]);
+
+            currentXP += betAmount; // Example XP gain based on bet amount
+            document.getElementById('xp-display').innerText = `${currentXP}/${levelUpAmount}`;
+            document.getElementById('xp-level').innerText = `${currentXP}/${levelUpAmount} XP`;
+
+            // Update progress bar
+            const progressBar = document.getElementById('xp-bar');
+            const progressPercentage = (currentXP / levelUpAmount) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+
+            // Check for level up
+            if (currentXP >= levelUpAmount) {
+
+                currentXP = currentXP - levelUpAmount; // Reset XP
+                levelUpAmount += currentLevel * 10; //Makes the leveling up harder
+                
+                //Updates all the xp displays and progress bar
+                document.getElementById('xp-display').innerText = `${currentXP}/${levelUpAmount}`;
+                document.getElementById('xp-bar').innertext = `${currentXP}/${levelUpAmount}`;
+                document.getElementById('xp-level').innerText = `${currentXP}/${levelUpAmount} XP`;
+                progressBar.style.width = `${(currentXP / levelUpAmount) * 100}%`
+
+                
+
+
+                currentLevel += 1;
+
+                levelDisplay.innerText = currentLevel;
+                
+            }
+        }
+
+        
+
+
+    </script>
+</body>
+</html>
