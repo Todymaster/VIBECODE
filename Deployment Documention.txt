@@ -1,0 +1,60 @@
+# Deployment Documentation for Fortnite Battle Slots - Advanced Edition
+
+## Project Overview
+- **Project Name:** Fortnite Battle Slots - Advanced Edition
+- **Description:** A web-based slot machine game themed around Fortnite, allowing users to spin reels, place bets, and earn V-Bucks.
+
+## Prerequisites
+- **Web Browser:** Ensure you have a modern web browser (Chrome, Firefox, Safari, etc.) to run the HTML files.
+- **Audio File:** Ensure the audio file `coralcorus.mp3` is available in the same directory as the HTML files for background music.
+
+## Environment Setup
+- **Local Environment:**
+  - No special software is required; simply a web browser to view the HTML files.
+
+## Deployment Steps
+1. **Download the HTML Files**
+   - Save the provided HTML code into two files:
+     - `cover.html` (for the cover page)
+     - `game.html` (for the actual game)
+
+2. **Add Audio File**
+   - Place the audio file `coralcorus.mp3` in the same directory as `cover.html` and `game.html`.
+
+3. **Open the Cover Page**
+   - Open your web browser.
+   - Drag and drop the `cover.html` file into the browser or use `File > Open` to navigate to the file.
+
+4. **Navigate to the Game**
+   - From the cover page, there should be a link or button to navigate to `game.html`. Click it to start the game.
+
+5. **Interact with the Game**
+   - Adjust the bet amount using the "+" and "-" buttons.
+   - Click the "SPIN" button to spin the reels.
+   - Claim the daily bonus by clicking on the notification.
+   - Access the settings menu to toggle sound effects and music.
+
+## Testing the Deployment
+- **Access the Game:**
+  - Open the browser and navigate to the `cover.html` file.
+- **Verify Functionality:**
+  - Ensure that the navigation to `game.html` works correctly.
+  - Check that the spin button works and updates the reels.
+  - Confirm that the betting system functions correctly.
+  - Test the daily bonus feature.
+  - Verify that the settings menu toggles sound options.
+
+## Rollback Procedure
+- If any issues arise, simply close the browser and reopen the `cover.html` file. No complex rollback is necessary as the game runs locally.
+
+## Troubleshooting
+- **Common Issues:**
+  - **Audio Not Playing:** Ensure the `coralcorus.mp3` file is in the same directory as the HTML files.
+  - **Game Not Responding:** Refresh the browser or reopen the HTML files.
+- **Logs:**
+  - Use the browser's developer tools (F12) to check for any JavaScript errors in the console.
+
+## Contact Information
+- **Maintainer:** [Your Name or Team Name]
+- **Email:** [Your Email Address]
+- **GitHub Repository:** [Link to the GitHub repository if applicable]
